@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>前端闖關冒險者 - 作品集入口網</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            /* 莫蘭迪柔和奶茶杏色系 */
+            --bg-main: #f5f0eb;
+            --bg-card: #ffffff;
+            --bg-card-locked: #eae5e0;
+            --text-primary: #4a443f;
+            --text-secondary: #8c827a;
+            --text-muted: #b5aba4;
+            --accent-color: #c89676;
+            --accent-hover: #b38263;
+            --accent-light: #f3e9e1;
+            --success-color: #8fa89b;
+            --success-light: #e8f0ec;
+            --border-color: #e6dfd8;
+            --shadow-sm: 0 4px 12px rgba(120, 100, 85, 0.05);
+            --shadow-md: 0 8px 24px rgba(120, 100, 85, 0.08);
+            --shadow-lg: 0 16px 32px rgba(120, 100, 85, 0.12);
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            --radius-sm: 8px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', 'Noto Sans TC', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px 80px 20px;
+            line-height: 1.6;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* 背景微光暈點綴 */
+        body::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(200, 150, 118, 0.12) 0%, rgba(245, 240, 235, 0) 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* 主容器 */
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            margin-bottom: 16px;
+        }
+
+        .avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--bg-card);
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+        }
+
+        .avatar-wrapper:hover .avatar {
+            transform: scale(1.05) rotate(3deg);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .level-badge {
+            position: absolute;
+            bottom: 2px;
+            right: 0px;
+            background: var(--accent-color);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 2px solid var(--bg-card);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .user-name {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+        }
+
+        .user-bio {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .progress-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            padding: 12px 24px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: var(--shadow-sm);
+            width: 100%;
+            max-width: 360px;
+        }
+
+        .progress-text {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .progress-bar-bg {
+            flex-grow: 1;
+            height: 8px;
+            background: #e0d8d0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 12.5%; /* 2/16 = 12.5% */
+            background: linear-gradient(90deg, var(--accent-color), #d8a688);
+            border-radius: 4px;
+            transition: width 1s ease-in-out;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            width: 100%;
+            margin-top: 10px;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        /* 響應式排版調整 */
+        @media (max-width: 992px) {
+            .grid-container { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .grid-container { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        }
+        @media (max-width: 480px) {
+            .grid-container { grid-template-columns: 1fr; }
+        }
+
+        /* 基礎卡片樣式 */
+        .quest-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 22px 18px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 150px;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .quest-card.unlocked {
+            border-color: rgba(200, 150, 118, 0.3);
+            cursor: pointer;
+        }
+
+        .quest-card.unlocked::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent-color);
+            transition: var(--transition);
+        }
+
+        /* 流暢酷炫 Hover 動畫 */
+        .quest-card.unlocked:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent-color);
+        }
+
+        .quest-card.unlocked:hover .card-icon {
+            transform: scale(1.15) rotate(-5deg);
+            color: var(--accent-color);
+        }
+
+        .quest-card.unlocked:active {
+            transform: translateY(-2px);
+        }
+
+        .quest-card.locked {
+            background: var(--bg-card-locked);
+            border-color: #dfd8d0;
+            opacity: 0.75;
+            cursor: not-allowed;
+            user-select: none;
+        }
+
+        .quest-card.locked:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        /* 卡片內部元素樣式 */
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .week-tag {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 3px 8px;
+            border-radius: var(--radius-sm);
+        }
+
+        .unlocked .week-tag {
+            background: var(--accent-light);
+            color: var(--accent-color);
+        }
+
+        .locked .week-tag {
+            background: #ded7cf;
+            color: var(--text-muted);
+        }
+
+        .badge-status {
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .unlocked .badge-status {
+            color: var(--success-color);
+            font-weight: 600;
+        }
+
+        .locked .badge-status {
+            color: var(--text-muted);
+        }
+
+        .card-body {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 4px;
+        }
+
+        .card-icon {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            transition: var(--transition);
+            width: 32px;
+            text-align: center;
+        }
+
+        .locked .card-icon {
+            color: #b0a69d;
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            line-height: 1.3;
+        }
+
+        .locked .card-title {
+            color: var(--text-muted);
+        }
+
+        .code-export-section {
+            width: 100%;
+            margin-top: 60px;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+        }
+
+        .code-header {
+            background: #ede6df;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .code-title {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .code-tabs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 6px 16px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .tab-btn.active {
+            background: var(--bg-card);
+            color: var(--accent-color);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .copy-btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+        }
+
+        .copy-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .code-content {
+            padding: 20px;
+            background: #282c34;
+            color: #abb2bf;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.85rem;
+            max-height: 350px;
+            overflow-y: auto;
+            display: none;
+            line-height: 1.5;
+        }
+
+        .code-content.active {
+            display: block;
+        }
+
+        /* 複製提示訊息快訊 */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--text-primary);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            box-shadow: var(--shadow-lg);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* Keyframes 動畫 */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header class="profile-header">
+            <div class="avatar-wrapper">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80" alt="大頭貼" class="avatar" id="userAvatar">
+                <span class="level-badge">LV. 2</span>
+            </div>
+            <h1 class="user-name">前端闖關冒險者</h1>
+            <p class="user-bio">網頁程式設計作品集 ‧ 闖關冒險地圖</p>
+            
+            <!-- RPG 闖關進度條 -->
+            <div class="progress-card">
+                <span class="progress-text"><i class="fa-solid fa-trophy" style="color: var(--accent-color); margin-right: 4px;"></i> 進度: 2 / 16</span>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill"></div>
+                </div>
+            </div>
+        </header>
+
+        <main class="grid-container">
+            <!-- Week 1 (已解鎖) -->
+            <a href="w1/index.html" class="quest-card unlocked">
+                <div class="card-top">
+                    <span class="week-tag">WEEK 01</span>
+                    <span class="badge-status"><i class="fa-solid fa-circle-check"></i> 已解鎖</span>
+                </div>
+                <div class="card-body">
+                    <i class="fa-solid fa-id-card card-icon"></i>
+                    <h2 class="card-title">Week 1 - 數位名片</h2>
+                </div>
+            </a>
+
+            <!-- Week 2 (已解鎖) -->
+            <a href="w2/index.html" class="quest-card unlocked">
+                <div class="card-top">
+                    <span class="week-tag">WEEK 02</span>
+                    <span class="badge-status"><i class="fa-solid fa-circle-check"></i> 已解鎖</span>
+                </div>
+                <div class="card-body">
+                    <i class="fa-solid fa-utensils card-icon"></i>
+                    <h2 class="card-title">Week 2 - 今天吃甚麼?</h2>
+                </div>
+            </a>
+
+            <!-- Week 3 ~ 16 (鎖定狀態) -->
+            <!-- Week 3 -->
+            <div class="quest-card locked" onclick="showLockedMessage(3)">
+                <div class="card-top">
+                    <span class="week-tag">WEEK 03</span>
+                    <span class="badge-status">🔒 尚未解鎖</span>
+                </div>
+                <div class="card-body">
+                    <i class="fa-solid fa-lock card-icon"></i>
+                    <h2 class="card-title">Week 3 - 尚未解鎖</h2>
+                </div>
+            </div>
+
+            <!-- Week 4 -->
+            <div class="quest-card locked" onclick="showLockedMessage(4)">
+                <div class="card-top">
+                    <span class="week-tag">WEEK 04</span>
+                    <span class="badge-status">🔒 尚未解鎖</span>
+                </div>
+                <div class="card-body">
+                    <i class="fa-solid fa-lock card-icon"></i>
+                    <h2 class="card-title">Week 4 - 尚未解鎖</h2>
+                </div>
+            </div>
+
+            <!-- Week 5 -->
+            <div class="quest-card locked" onclick="showLockedMessage(5)">
+                <div class="card-top">
+                    <span class="week-tag">WEEK 05</span>
+                    <span class="badge-status">🔒 尚未解鎖</span>
+                </div>
+                <div class="card-body">
+                    <i class="fa-solid fa-lock card-icon"></i>
+                    <h2 class="card-title">Week 5 - 尚未解鎖</h2>
+                </div>
+            </div>
+
+            <!-- Week 6 -->
+            <div class="quest-card locked" onclick="showLockedMessage(6)">
+                <div class="card-top">
+                    <span class="week-tag">WEEK 06</span>
+                    <span class="badge-status">🔒 尚未解鎖</span>
+                </div>
+                <div class="card-body">
+                    <i class="fa-solid fa-lock card-icon"></i>
+                    <h2 class="card-title">Week 6 - 尚未解鎖</h2>
+                </div>
+            </div>
+
+            <!-- Week 7 -->
+            <div class="quest-card locked" onclick="showLockedMessage(7)">
+                <div class="card-top">
+                    <span class="week-tag">WEEK 07</span>
+                    <span class="badge-status">🔒 尚未解鎖</span>
+                </div>
+                <div class="card-body">
+                    <i class="fa-solid fa-lock card-icon"></i>
+                    <h2 class="card-title">Week 7 - 尚未解鎖</h2>
+                </div>
+            </div>
+
+            <!-- Week 8 -->
+            <div class="quest-card locked" onclick="showLockedMessage(8)">
+                <div class="card-top">
+                    <span class="week-tag">WEEK 08</span>
+                    <span class="badge-status">🔒 尚未解鎖</span>
+                </div>
+                <div class="card-body">
+                    <i class="fa-solid fa-lock card-icon"></i>
+                    <h2 class="card-title">Week 8 - 尚未解鎖</h2>
+                </div>
+            </div>
+
+            <!-- Week 9 -->
+            <div class="quest-card locked" onclick="showLockedMessage(9)">
+                <div class="card-top">
+                    <span class="week-tag">WEEK 09</span>
+                    <span class="badge-status">🔒 尚未解鎖</span>
+                </div>
+                <div class="card-body">
+                    <i class="fa-solid fa-lock card-icon"></i>
+                    <h2 class="card-title">Week 9 - 尚未解鎖</h2>
+                </div>
+            </div>
+
+            <!-- Week 10 -->
+            <div class="quest-card locked" onclick="showLockedMessage(10)">
+                <div class="card-top">
+                    <span class="week-tag">WEEK 10</span>
+                    <span class="badge-status">🔒 尚未解鎖</span>
+                </div>
+                <div class="card-body">
+                    <i class="fa-solid fa-lock card-icon"></i>
+                    <h2 class="card-title">Week 10 - 尚未解鎖</h2>
+                </div>
+            </div>
+
+            <!-- Week 11 -->
+            <div class="quest-card locked" onclick="showLockedMessage(11)">
+                <div class="card-top">
+                    <span class="week-tag">WEEK 11</span>
+                    <span class="badge-status">🔒 尚未解鎖</span>
+                </div>
+                <div class="card-body">
+                    <i class="fa-solid fa-lock card-icon"></i>
+                    <h2 class="card-title">Week 11 - 尚未解鎖</h2>
+                </div>
+            </div>
+
+            <!-- Week 12 -->
+            <div class="quest-card locked" onclick="showLockedMessage(12)">
+                <div class="card-top">
+                    <span class="week-tag">WEEK 12</span>
+                    <span class="badge-status">🔒 尚未解鎖</span>
+                </div>
+                <div class="card-body">
+                    <i class="fa-solid fa-lock card-icon"></i>
+                    <h2 class="card-title">Week 12 - 尚未解鎖</h2>
+                </div>
+            </div>
+
+            <!-- Week 13 -->
+            <div class="quest-card locked" onclick="showLockedMessage(13)">
+                <div class="card-top">
+                    <span class="week-tag">WEEK 13</span>
+                    <span class="badge-status">🔒 尚未解鎖</span>
+                </div>
+                <div class="card-body">
+                    <i class="fa-solid fa-lock card-icon"></i>
+                    <h2 class="card-title">Week 13 - 尚未解鎖</h2>
+                </div>
+            </div>
+
+            <!-- Week 14 -->
+            <div class="quest-card locked" onclick="showLockedMessage(14)">
+                <div class="card-top">
+                    <span class="week-tag">WEEK 14</span>
+                    <span class="badge-status">🔒 尚未解鎖</span>
+                </div>
+                <div class="card-body">
+                    <i class="fa-solid fa-lock card-icon"></i>
+                    <h2 class="card-title">Week 14 - 尚未解鎖</h2>
+                </div>
+            </div>
+
+            <!-- Week 15 -->
+            <div class="quest-card locked" onclick="showLockedMessage(15)">
+                <div class="card-top">
+                    <span class="week-tag">WEEK 15</span>
+                    <span class="badge-status">🔒 尚未解鎖</span>
+                </div>
+                <div class="card-body">
+                    <i class="fa-solid fa-lock card-icon"></i>
+                    <h2 class="card-title">Week 15 - 尚未解鎖</h2>
+                </div>
+            </div>
+
+            <!-- Week 16 -->
+            <div class="quest-card locked" onclick="showLockedMessage(16)">
+                <div class="card-top">
+                    <span class="week-tag">WEEK 16</span>
+                    <span class="badge-status">🔒 尚未解鎖</span>
+                </div>
+                <div class="card-body">
+                    <i class="fa-solid fa-lock card-icon"></i>
+                    <h2 class="card-title">Week 16 - 尚未解鎖</h2>
+                </div>
+            </div>
+        </main>
+
+        <section class="code-export-section">
+            <div class="code-header">
+                <div class="code-title">
+                    <i class="fa-solid fa-code"></i> 程式碼檢視與交作業助手
+                </div>
+                <div class="code-tabs">
+                    <button class="tab-btn active" onclick="switchTab('html')">HTML 結構</button>
+                    <button class="tab-btn" onclick="switchTab('css')">CSS 樣式</button>
+                </div>
+                <button class="copy-btn" onclick="copyCurrentCode()">
+                    <i class="fa-regular fa-copy"></i> 複製此區塊程式碼
+                </button>
+            </div>
+            
+            <pre class="code-content active" id="code-html"><code>&lt;!-- 作品集 index.html 結構 --&gt;
+&lt;div class="container"&gt;
+  &lt;header class="profile-header"&gt;
+    &lt;img src="avatar.jpg" class="avatar"&gt;
+    &lt;h1&gt;前端闖關冒險者&lt;/h1&gt;
+  &lt;/header&gt;
+
+  &lt;main class="grid-container"&gt;
+    &lt;!-- Week 1 (已解鎖) --&gt;
+    &lt;a href="w1/index.html" class="quest-card unlocked"&gt;
+      Week 1 - 數位名片
+    &lt;/a&gt;
+    &lt;!-- Week 2 (已解鎖) --&gt;
+    &lt;a href="w2/index.html" class="quest-card unlocked"&gt;
+      Week 2 - 今天吃甚麼?
+    &lt;/a&gt;
+    &lt;!-- Week 3 ~ 16 (鎖定) --&gt;
+    &lt;div class="quest-card locked"&gt;🔒 Week 3 - 尚未解鎖&lt;/div&gt;
+    ...
+  &lt;/main&gt;
+&lt;/div&gt;</code></pre>
+
+            <pre class="code-content" id="code-css"><code>/* 莫蘭迪奶茶色系 CSS 核心樣式 */
+:root {
+  --bg-main: #f5f0eb;
+  --bg-card: #ffffff;
+  --bg-card-locked: #eae5e0;
+  --accent-color: #c89676;
+}
+
+body {
+  background-color: var(--bg-main);
+  font-family: 'Noto Sans TC', sans-serif;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.quest-card.unlocked:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 32px rgba(120, 100, 85, 0.12);
+}</code></pre>
+        </section>
+    </div>
+
+    <!-- 複製成功提示框 -->
+    <div class="toast" id="toast">複製成功！已準備好交作業囉 🚀</div>
+
+    <script>
+        let currentTab = 'html';
+
+        // 點擊未解鎖關卡時的提示
+        function showLockedMessage(weekNum) {
+            showToast(`🔒 Week ${weekNum} 關卡尚未開啟，請先完成前面的任務！`);
+        }
+
+        // 顯示快訊提示
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // 切換 HTML / CSS 頁籤
+        function switchTab(type) {
+            currentTab = type;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.code-content').forEach(block => block.classList.remove('active'));
+
+            if (type === 'html') {
+                document.querySelectorAll('.tab-btn')[0].classList.add('active');
+                document.getElementById('code-html').classList.add('active');
+            } else {
+                document.querySelectorAll('.tab-btn')[1].classList.add('active');
+                document.getElementById('code-css').classList.add('active');
+            }
+        }
+
+        // 複製當前顯示的程式碼
+        function copyCurrentCode() {
+            const targetId = currentTab === 'html' ? 'code-html' : 'code-css';
+            const codeText = document.getElementById(targetId).textContent;
+
+            // 使用相容性高的複製機制
+            const textarea = document.createElement('textarea');
+            textarea.value = codeText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+
+            showToast(`已複製 ${currentTab.toUpperCase()} 程式碼至剪貼簿！`);
+        }
+    </script>
+</body>
+</html>
