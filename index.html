@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的作品集入口網站</title>
+    <style>
+        /* CSS 變數：方便調整極簡風格色調 */
+        :root {
+            --bg-color: #1a1e24;       /* 極簡深灰色背景 */
+            --text-main: #f3f4f6;      /* 主文字顏色 */
+            --text-sub: #9ca3af;       /* 副標題與未解鎖顏色 */
+            --btn-active-bg: #2d3540;  /* 已解鎖按鈕背景 */
+            --btn-locked-bg: #22272e;  /* 未解鎖按鈕背景 */
+            --accent-glow: #6366f1;    /* 滑鼠懸停時的酷炫霓虹光暈色 (科技靛藍) */
+        }
+
+        /* 基礎全域樣式 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        /* 主容器 */
+        .container {
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        /* 個人資訊區塊 (置中) */
+        .profile-section {
+            margin-bottom: 40px;
+        }
+
+        .avatar {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--text-sub);
+            margin-bottom: 16px;
+            transition: transform 0.5s ease, border-color 0.5s ease;
+        }
+
+        /* 驚喜小動畫：滑鼠移到大頭貼會微旋轉放大 */
+        .avatar:hover {
+            transform: scale(1.05) rotate(5deg);
+            border-color: var(--accent-glow);
+        }
+
+        .name {
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: var(--text-sub);
+            letter-spacing: 1px;
+        }
+
+        /* 網格選單排版：預設桌機版 4 欄，16個剛好排成 4x4 方陣 */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        /* 通用按鈕基礎樣式 */
+        .menu-item {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: 1px solid transparent;
+        }
+
+        /* 已解鎖按鈕樣式 */
+        .menu-item.active {
+            background-color: var(--btn-active-bg);
+            color: var(--text-main);
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 酷炫的已解鎖按鈕滑鼠懸停 (Hover) 動畫效果 */
+        .menu-item.active:hover {
+            transform: translateY(-5px); /* 向上微幅懸浮 */
+            background-color: #374151;
+            border-color: var(--accent-glow);
+            /* 產生酷炫的靛藍色發光環境光暈 */
+            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.15), 
+                        0 0 12px rgba(99, 102, 241, 0.3);
+        }
+
+        /* 未解鎖按鈕樣式 */
+        .menu-item.locked {
+            background-color: var(--btn-locked-bg);
+            color: var(--text-sub);
+            opacity: 0.5;
+            cursor: not-allowed; /* 滑鼠游標顯示禁止符號 */
+            border: 1px dashed #374151;
+        }
+        
+        /* 鎖頭 Emoji 樣式微調 */
+        .lock-icon {
+            font-size: 1.2rem;
+            margin-bottom: 6px;
+        }
+
+        /* 響應式設計 (RWD)：手機與平板版面優化 */
+        @media (max-width: 768px) {
+            .menu-grid {
+                grid-template-columns: repeat(2, 1fr); /* 平板、大螢幕手機改成雙欄排列 */
+                gap: 12px;
+            }
+            .menu-item {
+                height: 90px;
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 20px 12px;
+            }
+            .menu-grid {
+                grid-template-columns: 1fr; /* 超小螢幕手機改成單欄直式排列，方便單手點擊 */
+            }
+            .avatar {
+                width: 95px;
+                height: 95px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- 1. 畫面正中央的大頭貼與名字 -->
+        <header class="profile-section">
+            <!-- 預設假圖片使用 placeholder 服務，之後可替換為你自己作品集目錄下的圖片如 img/me.jpg -->
+            <img src="https://placeholder.com" alt="我的大頭貼" class="avatar">
+            <h1 class="name">你的名字</h1>
+            <p class="subtitle">網頁前端設計 ‧ 學習闖關地圖</p>
+        </header>
+
+        <!-- 2. 下方 16 個排列整齊的按鈕 -->
+        <main class="menu-grid">
+            
+            <!-- 3. 前兩個已解鎖連結的按鈕 -->
+            <a href="w1/index.html" class="menu-item active">
+                <span>Week 1</span>
+                <strong>數位名片</strong>
+            </a>
+
+            <a href="w2/index.html" class="menu-item active">
+                <span>Week 2</span>
+                <strong>今天吃甚麼?</strong>
+            </a>
+
+            <!-- 4. 剩下的 14 個未解鎖灰色鎖頭狀態按鈕 (共湊滿 16 個) -->
+            <div class="menu-item locked">
+                <span class="lock-icon">🔒</span>
+                <span>Week 3 - 未解鎖</span>
+            </div>
+
+            <div class="menu-item locked">
+                <span class="lock-icon">🔒</span>
+                <span>Week 4 - 未解鎖</span>
+            </div>
+
+            <div class="menu-item locked">
+                <span class="lock-icon">🔒</span>
+                <span>Week 5 - 未解鎖</span>
+            </div>
+
+            <div class="menu-item locked">
+                <span class="lock-icon">🔒</span>
+                <span>Week 6 - 未解鎖</span>
+            </div>
+
+            <div class="menu-item locked">
+                <span class="lock-icon">🔒</span>
+                <span>Week 7 - 未解鎖</span>
+            </div>
+
+            <div class="menu-item locked">
+                <span class="lock-icon">🔒</span>
+                <span>Week 8 - 未解鎖</span>
+            </div>
+
+            <div class="menu-item locked">
+                <span class="lock-icon">🔒</span>
+                <span>Week 9 - 未解鎖</span>
+            </div>
+
+            <div class="menu-item locked">
+                <span class="lock-icon">🔒</span>
+                <span>Week 10 - 未解鎖</span>
+            </div>
+
+            <div class="menu-item locked">
+                <span class="lock-icon">🔒</span>
+                <span>Week 11 - 未解鎖</span>
+            </div>
+
+            <div class="menu-item locked">
+                <span class="lock-icon">🔒</span>
+                <span>Week 12 - 未解鎖</span>
+            </div>
+
+            <div class="menu-item locked">
+                <span class="lock-icon">🔒</span>
+                <span>Week 13 - 未解鎖</span>
+            </div>
+
+            <div class="menu-item locked">
+                <span class="lock-icon">🔒</span>
+                <span>Week 14 - 未解鎖</span>
+            </div>
+
+            <div class="menu-item locked">
+                <span class="lock-icon">🔒</span>
+                <span>Week 15 - 未解鎖</span>
+            </div>
+
+            <div class="menu-item locked">
+                <span class="lock-icon">🔒</span>
+                <span>Week 16 - 未解鎖</span>
+            </div>
+
+        </main>
+    </div>
+
+</body>
+</html>
