@@ -3,249 +3,494 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>我的網頁程式作品集</title>
+<title>網頁程式設計作品集 | Web Portfolio</title>
+<!-- Google Fonts Inter & Noto Sans TC for clean modern typography -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+
 <style>
 :root {
---bg-color: #f7f5ef; /* 極簡淺色溫潤背景 (非純白) */
---card-bg: #ffffff;
---text-main: #2c3e50;
---text-muted: #8c9ba5;
---accent-color: #4a90e2;
---accent-gradient: linear-gradient(135deg, #6ba4e8, #4a90e2);
---locked-bg: #e2e8f0;
---locked-text: #94a3b8;
---shadow-subtle: 0 10px 30px rgba(0, 0, 0, 0.05);
---shadow-hover: 0 15px 35px rgba(74, 144, 226, 0.2);
+/* Minimal Light Theme Color Palette (Warm Beige / Subtle Sand Tone) */
+--bg-gradient: linear-gradient(135deg, #f5f3ef 0%, #e9e5de 100%);
+--card-bg: rgba(255, 255, 255, 0.75);
+--card-border: rgba(255, 255, 255, 0.9);
+--card-shadow: 0 10px 30px -10px rgba(110, 105, 98, 0.12);
+--card-hover-shadow: 0 20px 40px -12px rgba(90, 85, 78, 0.22);
+
+--text-primary: #2d2b2a;
+--text-secondary: #706c68;
+--text-muted: #a39e98;
+
+--accent-color: #5b7065; /* Elegant Sage Green accent */
+--accent-light: #e8eee9;
+--accent-glow: rgba(91, 112, 101, 0.3);
+
+--locked-bg: rgba(235, 232, 226, 0.6);
+--locked-text: #9e9890;
+--locked-border: rgba(220, 215, 207, 0.6);
 }
 
 * {
 box-sizing: border-box;
 margin: 0;
 padding: 0;
-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 body {
-background-color: var(--bg-color);
-color: var(--text-main);
+font-family: 'Inter', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+background: var(--bg-gradient);
+background-attachment: fixed;
+color: var(--text-primary);
 min-height: 100vh;
 display: flex;
 flex-direction: column;
 align-items: center;
-padding: 40px 20px;
+justify-content: flex-start;
+padding: 3rem 1.5rem;
+line-height: 1.6;
 }
 
 .container {
 width: 100%;
-max-width: 900px;
-display: flex;
-flex-direction: column;
-align-items: center;
+max-width: 1040px;
+margin: 0 auto;
 }
 
-/* 個人資訊區塊 (置中) */
-.profile-section {
+/* Profile Header Section */
+.profile-card {
 text-align: center;
-margin-bottom: 50px;
-animation: fadeInDown 0.8s ease-out;
+margin-bottom: 3rem;
+animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.avatar-container {
-width: 120px;
-height: 120px;
+.avatar-wrapper {
+position: relative;
+display: inline-block;
+margin-bottom: 1.25rem;
+}
+
+.avatar {
+width: 110px;
+height: 110px;
 border-radius: 50%;
-overflow: hidden;
-margin: 0 auto 20px;
-box-shadow: var(--shadow-subtle);
-border: 4px solid #ffffff;
-transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.avatar-container:hover {
-transform: scale(1.05) rotate(3deg);
-}
-
-.avatar-container img {
-width: 100%;
-height: 100%;
 object-fit: cover;
+border: 4px solid #ffffff;
+box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.avatar-wrapper:hover .avatar {
+transform: scale(1.05) rotate(2deg);
+box-shadow: 0 12px 30px rgba(91, 112, 101, 0.2);
+}
+
+.level-badge {
+position: absolute;
+bottom: 2px;
+right: 2px;
+background: var(--accent-color);
+color: #ffffff;
+font-size: 0.75rem;
+font-weight: 700;
+padding: 0.2rem 0.6rem;
+border-radius: 20px;
+border: 2px solid #ffffff;
+box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 .profile-name {
-font-size: 1.8rem;
+font-size: 1.85rem;
 font-weight: 700;
-letter-spacing: 1px;
-margin-bottom: 8px;
-color: var(--text-main);
+color: var(--text-primary);
+letter-spacing: -0.02em;
+margin-bottom: 0.3rem;
 }
 
 .profile-subtitle {
-font-size: 0.95rem;
-color: var(--text-muted);
+font-size: 0.98rem;
+color: var(--text-secondary);
 font-weight: 500;
 }
 
-/* 按鈕網格排版 (手機與電腦適應) */
-.grid-container {
-width: 100%;
-display: grid;
-grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-gap: 20px;
-animation: fadeInUp 0.8s ease-out 0.2s both;
+/* Progress Bar for Game Quest Vibe */
+.progress-container {
+max-width: 380px;
+margin: 1.2rem auto 0 auto;
+background: rgba(255, 255, 255, 0.6);
+border-radius: 20px;
+padding: 0.4rem 0.8rem;
+border: 1px solid rgba(255, 255, 255, 0.8);
+display: flex;
+align-items: center;
+gap: 10px;
+box-shadow: 0 2px 10px rgba(0,0,0,0.02);
 }
 
-/* 按鈕基本樣式 */
-.quest-btn {
-background-color: var(--card-bg);
-border-radius: 14px;
-padding: 20px 15px;
-text-align: center;
-text-decoration: none;
-color: var(--text-main);
-font-weight: 600;
-font-size: 0.95rem;
-box-shadow: var(--shadow-subtle);
-border: 1px solid rgba(0, 0, 0, 0.03);
-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-display: flex;
-flex-direction: column;
-align-items: center;
-justify-content: center;
-min-height: 90px;
-position: relative;
+.progress-bar-bg {
+flex: 1;
+height: 8px;
+background: #e2ddd5;
+border-radius: 4px;
 overflow: hidden;
 }
 
-/* 已解鎖按鈕的 Hover 動畫特效 */
-.quest-btn.unlocked:hover {
-transform: translateY(-5px);
-box-shadow: var(--shadow-hover);
-border-color: rgba(74, 144, 226, 0.4);
+.progress-fill {
+height: 100%;
+width: 12.5%; /* 2/16 = 12.5% */
+background: linear-gradient(90deg, #5b7065, #789384);
+border-radius: 4px;
+transition: width 1s ease;
+}
+
+.progress-text {
+font-size: 0.78rem;
+font-weight: 600;
+color: var(--text-secondary);
+}
+
+.quest-grid {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 1.25rem;
+animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Card / Button Base Styles */
+.quest-card {
+position: relative;
+background: var(--card-bg);
+backdrop-filter: blur(10px);
+-webkit-backdrop-filter: blur(10px);
+border: 1px solid var(--card-border);
+border-radius: 16px;
+padding: 1.35rem 1.1rem;
+text-decoration: none;
+color: inherit;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+min-height: 135px;
+box-shadow: var(--card-shadow);
+transition: all 0.35s cubic-bezier(0.25, 0.8, 0.25, 1);
+overflow: hidden;
+}
+
+/* Unlocked Buttons Specific Styles */
+.quest-card.unlocked {
+cursor: pointer;
+}
+
+/* Cool Hover Effects on Unlocked Cards */
+.quest-card.unlocked::before {
+content: '';
+position: absolute;
+top: 0;
+left: -100%;
+width: 100%;
+height: 100%;
+background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+transition: left 0.6s ease;
+}
+
+.quest-card.unlocked:hover {
+transform: translateY(-6px) scale(1.02);
+box-shadow: var(--card-hover-shadow), 0 0 0 2px var(--accent-color);
+background: rgba(255, 255, 255, 0.95);
+}
+
+.quest-card.unlocked:hover::before {
+left: 100%;
+}
+
+.quest-card.unlocked:active {
+transform: translateY(-2px) scale(0.99);
+}
+
+/* Header info inside cards */
+.card-top {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 0.75rem;
+}
+
+.week-tag {
+font-size: 0.75rem;
+font-weight: 700;
+letter-spacing: 0.05em;
+text-transform: uppercase;
+padding: 0.25rem 0.55rem;
+border-radius: 8px;
+}
+
+.unlocked .week-tag {
+background-color: var(--accent-light);
 color: var(--accent-color);
 }
 
-.quest-btn.unlocked::after {
-content: '';
-position: absolute;
-bottom: 0;
-left: 0;
-width: 100%;
-height: 3px;
-background: var(--accent-gradient);
-transform: scaleX(0);
+.status-icon {
+font-size: 1.1rem;
 transition: transform 0.3s ease;
 }
 
-.quest-btn.unlocked:hover::after {
-transform: scaleX(1);
+.unlocked:hover .status-icon {
+transform: translateX(3px) scale(1.1);
 }
 
-/* 未解鎖按鈕樣式 */
-.quest-btn.locked {
-background-color: var(--locked-bg);
+.card-title {
+font-size: 1rem;
+font-weight: 600;
+line-height: 1.4;
+color: var(--text-primary);
+}
+
+/* Locked Card Styling */
+.quest-card.locked {
+background: var(--locked-bg);
+border-color: var(--locked-border);
 color: var(--locked-text);
 cursor: not-allowed;
 box-shadow: none;
-border: 1px dashed #cbd5e1;
+user-select: none;
+opacity: 0.85;
 }
 
-.quest-btn.locked span {
-font-size: 0.85rem;
-margin-top: 4px;
+.locked .week-tag {
+background-color: rgba(200, 195, 187, 0.3);
+color: var(--locked-text);
 }
 
-/* 動畫定義 */
-@keyframes fadeInDown {
-from { opacity: 0; transform: translateY(-20px); }
-to { opacity: 1; transform: translateY(0); }
+.locked .card-title {
+color: var(--locked-text);
+font-weight: 500;
 }
 
-@keyframes fadeInUp {
-from { opacity: 0; transform: translateY(20px); }
-to { opacity: 1; transform: translateY(0); }
+.locked:hover {
+transform: translateY(-2px);
+background: rgba(230, 226, 220, 0.8);
 }
 
-/* 響應式微調 */
-@media (max-width: 480px) {
-.grid-container {
+@media (max-width: 960px) {
+.quest-grid {
+grid-template-columns: repeat(3, 1fr);
+gap: 1rem;
+}
+}
+
+@media (max-width: 680px) {
+body {
+padding: 2rem 1rem;
+}
+.quest-grid {
 grid-template-columns: repeat(2, 1fr);
-gap: 12px;
+gap: 0.85rem;
+}
+.quest-card {
+padding: 1.1rem 0.9rem;
+min-height: 120px;
+}
+.card-title {
+font-size: 0.92rem;
 }
 .profile-name {
 font-size: 1.5rem;
 }
+}
+
+@media (max-width: 380px) {
+.quest-grid {
+grid-template-columns: 1fr;
+}
+}
+
+@keyframes fadeInDown {
+from {
+opacity: 0;
+transform: translateY(-20px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+@keyframes fadeInUp {
+from {
+opacity: 0;
+transform: translateY(20px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+footer {
+margin-top: 4rem;
+text-align: center;
+font-size: 0.82rem;
+color: var(--text-muted);
 }
 </style>
 </head>
 <body>
 
 <div class="container">
-<!-- 1. 畫面正中央大頭貼與名字 -->
-<header class="profile-section">
-<div class="avatar-container">
-<!-- 假圖片預設連結 -->
-<img src="https://picsum.photos/seed/portfolio-avatar/200/200" alt="大頭貼">
+<header class="profile-card">
+<div class="avatar-wrapper">
+<!-- 大頭貼預設假圖 -->
+<img class="avatar" src="https://placehold.co/200x200/5b7065/ffffff?text=My+Avatar" alt="Student Avatar">
+<span class="level-badge">LV. 02</span>
 </div>
 <h1 class="profile-name">我的名字</h1>
-<p class="profile-subtitle">網頁程式設計課程作品集</p>
+<p class="profile-subtitle">網頁程式設計作品集</p>
+
+<!-- 關卡進度條 -->
+<div class="progress-container">
+<div class="progress-bar-bg">
+<div class="progress-fill"></div>
+</div>
+<span class="progress-text">2 / 16 解鎖</span>
+</div>
 </header>
 
-<!-- 2. 下方 16 個按鈕網格 -->
-<main class="grid-container">
-<!-- 按鈕 1：已解鎖 -->
-<a href="w1/index.html" class="quest-btn unlocked">
-Week 1 - 數位名片
+<main class="quest-grid">
+<!-- 已解鎖按鈕 1 -->
+<a href="w1/index.html" class="quest-card unlocked">
+<div class="card-top">
+<span class="week-tag">Week 01</span>
+<span class="status-icon">🚀</span>
+</div>
+<div class="card-title">Week 1 - 數位名片</div>
 </a>
 
-<!-- 按鈕 2：已解鎖 -->
-<a href="w2/index.html" class="quest-btn unlocked">
-Week 2 - 今天吃甚麼?
+<!-- 已解鎖按鈕 2 -->
+<a href="w2/index.html" class="quest-card unlocked">
+<div class="card-top">
+<span class="week-tag">Week 02</span>
+<span class="status-icon">🍔</span>
+</div>
+<div class="card-title">Week 2 - 今天吃甚麼?</div>
 </a>
 
-<!-- 按鈕 3 ~ 16：未解鎖狀態 -->
-<a href="#" class="quest-btn locked" onclick="return false;">
-Week 3 <span>🔒 未解鎖</span>
-</a>
-<a href="#" class="quest-btn locked" onclick="return false;">
-Week 4 <span>🔒 未解鎖</span>
-</a>
-<a href="#" class="quest-btn locked" onclick="return false;">
-Week 5 <span>🔒 未解鎖</span>
-</a>
-<a href="#" class="quest-btn locked" onclick="return false;">
-Week 6 <span>🔒 未解鎖</span>
-</a>
-<a href="#" class="quest-btn locked" onclick="return false;">
-Week 7 <span>🔒 未解鎖</span>
-</a>
-<a href="#" class="quest-btn locked" onclick="return false;">
-Week 8 <span>🔒 未解鎖</span>
-</a>
-<a href="#" class="quest-btn locked" onclick="return false;">
-Week 9 <span>🔒 未解鎖</span>
-</a>
-<a href="#" class="quest-btn locked" onclick="return false;">
-Week 10 <span>🔒 未解鎖</span>
-</a>
-<a href="#" class="quest-btn locked" onclick="return false;">
-Week 11 <span>🔒 未解鎖</span>
-</a>
-<a href="#" class="quest-btn locked" onclick="return false;">
-Week 12 <span>🔒 未解鎖</span>
-</a>
-<a href="#" class="quest-btn locked" onclick="return false;">
-Week 13 <span>🔒 未解鎖</span>
-</a>
-<a href="#" class="quest-btn locked" onclick="return false;">
-Week 14 <span>🔒 未解鎖</span>
-</a>
-<a href="#" class="quest-btn locked" onclick="return false;">
-Week 15 <span>🔒 未解鎖</span>
-</a>
-<a href="#" class="quest-btn locked" onclick="return false;">
-Week 16 <span>🔒 未解鎖</span>
-</a>
+<!-- 未解鎖按鈕 3 至 16 -->
+<div class="quest-card locked">
+<div class="card-top">
+<span class="week-tag">Week 03</span>
+<span class="status-icon">🔒</span>
+</div>
+<div class="card-title">Week 3 - 尚未解鎖</div>
+</div>
+
+<div class="quest-card locked">
+<div class="card-top">
+<span class="week-tag">Week 04</span>
+<span class="status-icon">🔒</span>
+</div>
+<div class="card-title">Week 4 - 尚未解鎖</div>
+</div>
+
+<div class="quest-card locked">
+<div class="card-top">
+<span class="week-tag">Week 05</span>
+<span class="status-icon">🔒</span>
+</div>
+<div class="card-title">Week 5 - 尚未解鎖</div>
+</div>
+
+<div class="quest-card locked">
+<div class="card-top">
+<span class="week-tag">Week 06</span>
+<span class="status-icon">🔒</span>
+</div>
+<div class="card-title">Week 6 - 尚未解鎖</div>
+</div>
+
+<div class="quest-card locked">
+<div class="card-top">
+<span class="week-tag">Week 07</span>
+<span class="status-icon">🔒</span>
+</div>
+<div class="card-title">Week 7 - 尚未解鎖</div>
+</div>
+
+<div class="quest-card locked">
+<div class="card-top">
+<span class="week-tag">Week 08</span>
+<span class="status-icon">🔒</span>
+</div>
+<div class="card-title">Week 8 - 尚未解鎖</div>
+</div>
+
+<div class="quest-card locked">
+<div class="card-top">
+<span class="week-tag">Week 09</span>
+<span class="status-icon">🔒</span>
+</div>
+<div class="card-title">Week 9 - 尚未解鎖</div>
+</div>
+
+<div class="quest-card locked">
+<div class="card-top">
+<span class="week-tag">Week 10</span>
+<span class="status-icon">🔒</span>
+</div>
+<div class="card-title">Week 10 - 尚未解鎖</div>
+</div>
+
+<div class="quest-card locked">
+<div class="card-top">
+<span class="week-tag">Week 11</span>
+<span class="status-icon">🔒</span>
+</div>
+<div class="card-title">Week 11 - 尚未解鎖</div>
+</div>
+
+<div class="quest-card locked">
+<div class="card-top">
+<span class="week-tag">Week 12</span>
+<span class="status-icon">🔒</span>
+</div>
+<div class="card-title">Week 12 - 尚未解鎖</div>
+</div>
+
+<div class="quest-card locked">
+<div class="card-top">
+<span class="week-tag">Week 13</span>
+<span class="status-icon">🔒</span>
+</div>
+<div class="card-title">Week 13 - 尚未解鎖</div>
+</div>
+
+<div class="quest-card locked">
+<div class="card-top">
+<span class="week-tag">Week 14</span>
+<span class="status-icon">🔒</span>
+</div>
+<div class="card-title">Week 14 - 尚未解鎖</div>
+</div>
+
+<div class="quest-card locked">
+<div class="card-top">
+<span class="week-tag">Week 15</span>
+<span class="status-icon">🔒</span>
+</div>
+<div class="card-title">Week 15 - 尚未解鎖</div>
+</div>
+
+<div class="quest-card locked">
+<div class="card-top">
+<span class="week-tag">Week 16</span>
+<span class="status-icon">🔒</span>
+</div>
+<div class="card-title">Week 16 - 尚未解鎖</div>
+</div>
 </main>
+
+<footer>
+<p>© Web Programming Portfolio • Keep Learning & Coding</p>
+</footer>
 </div>
 
 </body>
