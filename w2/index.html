@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>今天吃什麼？隨機抽籤機</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Zen Maru Gothic', 'PingFang TC', 'Microsoft JhengHei', sans-serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #FFF9E6 0%, #FFE5A3 50%, #FFC107 100%);
+            padding: 20px;
+        }
+        .card {
+            background-color: #FFFFFF;
+            border-radius: 28px;
+            padding: 40px 30px;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            box-shadow: 0 12px 32px rgba(255, 140, 0, 0.2);
+            border: 4px solid #FF9800;
+        }
+        .title {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: #E65100;
+            margin-bottom: 25px;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease;
+        }
+        .bounce {
+            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.3) rotate(-5deg); }
+            50% { transform: scale(1.15) rotate(3deg); }
+            70% { transform: scale(0.95) rotate(-1deg); }
+            100% { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
+        .image-container {
+            width: 100%;
+            height: 220px;
+            margin-bottom: 25px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+            border: 3px solid #FFE082;
+        }
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 16px 24px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            box-shadow: 0 6px 0px rgba(0, 0, 0, 0.15);
+        }
+        .btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0px rgba(0, 0, 0, 0.15);
+        }
+        .btn-primary {
+            background-color: #FF9800;
+            color: #FFFFFF;
+        }
+        .btn-primary:hover {
+            background-color: #F57C00;
+        }
+        .btn-secondary {
+            background-color: #4CAF50;
+            color: #FFFFFF;
+        }
+        .btn-secondary:hover {
+            background-color: #388E3C;
+        }
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1 id="title" class="title">今天吃什麼？</h1>
+
+        <div id="image-container" class="image-container hidden">
+            <img id="food-image" src="" alt="美食照片">
+        </div>
+
+        <div class="button-group">
+            <button id="draw-btn" class="btn btn-primary">點我抽籤 🎲</button>
+            <a id="map-btn" class="btn btn-secondary hidden" href="#" target="_blank" rel="noopener noreferrer">馬上出發 🧭</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const foodList = [
+                {
+                    name: "蛋餅 🥞",
+                    image: "https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80",
+                    mapQuery: "蛋餅"
+                },
+                {
+                    name: "簡餐 🍱",
+                    image: "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80",
+                    mapQuery: "簡餐"
+                },
+                {
+                    name: "豆花 🥣",
+                    image: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=800&q=80",
+                    mapQuery: "豆花"
+                },
+                {
+                    name: "丼飯 🍚",
+                    image: "https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=800&q=80",
+                    mapQuery: "丼飯"
+                },
+                {
+                    name: "鍋燒 🍜",
+                    image: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=800&q=80",
+                    mapQuery: "鍋燒意麵"
+                }
+            ];
+
+            const titleElement = document.getElementById('title');
+            const imageContainer = document.getElementById('image-container');
+            const foodImage = document.getElementById('food-image');
+            const drawBtn = document.getElementById('draw-btn');
+            const mapBtn = document.getElementById('map-btn');
+
+            drawBtn.addEventListener('click', () => {
+                const randomIndex = Math.floor(Math.random() * foodList.length);
+                const selectedFood = foodList[randomIndex];
+
+                titleElement.textContent = `今天吃：${selectedFood.name}`;
+                
+                titleElement.classList.remove('bounce');
+                void titleElement.offsetWidth;
+                titleElement.classList.add('bounce');
+
+                foodImage.src = selectedFood.image;
+                foodImage.alt = selectedFood.name;
+                imageContainer.classList.remove('hidden');
+
+                const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(selectedFood.mapQuery)}`;
+                mapBtn.href = mapUrl;
+                mapBtn.classList.remove('hidden');
+
+                drawBtn.textContent = "不喜歡？再抽一次！ 🎲";
+            });
+        });
+    </script>
+</body>
+</html>
